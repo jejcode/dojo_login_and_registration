@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register or Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row m-3 justify-content-around align-items-start">
+            <div class="col-4 text-bg-dark rounded p-4">
+                <h1 class="text-primary mb-3">Register</h1>
+                {% with r_messages = get_flashed_messages(category_filter=['registration']) %}
+                    {% if r_messages %}
+                        <div class="m-3 p-3 text-bg-danger">
+                            {% for message in r_messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <form action="/register/process" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label" for="fname">First Name:</label>
+                        <input class="form-control" type="text" name="fname" id="fname" value="{{ in_progress['fname']}}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="lname">Last Name:</label>
+                        <input class="form-control" type="text" name="lname" id="lname" value="{{ in_progress['lname']}}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Email:</label>
+                        <input class="form-control" type="text" name="email" id="email" value="{{ in_progress['email']}}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="password">Password:</label>
+                        <input class="form-control" type="password" name="password" id="password" value="{{ in_progress['password'] }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="confirm_password">Confirm Password:</label>
+                        <input class="form-control" type="password" name="confirm_password" id="confirm_password">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"for="birthday">Birthday</label>
+                        <input class="form-control" type="date" name="birthday" id="birthday" value="{{ in_progress['birthday'] }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="lang">Favorite Programming Language:</label>
+                        <select class="form-select" name="lang" id="lang">
+                            {% set default = 'selected' if 'lang' not in in_progress else '' %}
+                            <option {{ default }}>Select your favorite...</option>
+                            {% set html = 'selected' if in_progress['lang'] == 'HTML/CSS' else '' %}
+                            <option value="HTML/CSS" {{ html }}>HTML/CSS</option>
+                            {% set js = 'selected' if in_progress['lang'] == 'Javascript' else '' %}
+                            <option value="Javascript" {{ js }}>Javascript</option>
+                            {% set py = 'selected' if in_progress['lang'] == 'Python' else '' %}
+                            <option value="Python" {{ py }}>Python</option>
+                            {% set java = 'selected' if in_progress['lang'] == 'Java' else '' %}
+                            <option value="Java" {{ java }}>Java</option>
+                            {% set csharp = 'selected' if in_progress['lang'] == 'C#' else '' %}
+                            <option value="C#" {{ csharp }}>C#</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <p class="form-label">Favorite operating system:</p>
+                        <div class="form-check">
+                            {% set linux = 'checked' if in_progress['os'] == 'GNU/Linux' else '' %}
+                            <label class="form-check-label" for="linux">GNU/Linux</label>
+                            <input class="form-check-input" type="radio" name="os" id="linux" value="GNU/Linux" {{ linux }}>
+                        </div>
+                        <div class="form-check">
+                            {% set mac = 'checked' if in_progress['os'] == 'Mac OS' else '' %}
+                            <label class="form-check-label" for="mac">Mac OS</label>
+                            <input class="form-check-input" type="radio" name="os" id="mac" value="Mac OS" {{ mac }}>
+                        </div>
+                        <div class="form-check">
+                            {% set windows = 'checked' if in_progress['os'] == 'Windows' else '' %}
+                            <label class="form-check-label" for="windows">Windows</label>
+                            <input class="form-check-input" type="radio" name="os" id="windows" value="Windows" {{ windows }}>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <p>My strategies to learn new algorithms:</p>
+                        <div class="form-check form-switch">
+                            {% set check1 = 'checked' if 'strat1' in in_progress else '' %}
+                            <label class="form-check-label" for="strat1">Memorization</label>
+                            <input class="form-check-input" type="checkbox" role="switch" name="strat1" id="strat1" value="Memorization" {{ check1 }}>
+                        </div>
+                        <div class="form-check form-switch">
+                            {% set check2 = 'checked' if 'strat2' in in_progress else '' %}
+                            <label class="form-check-label" for="strat2">Follow along with video</label>
+                            <input class="form-check-input" type="checkbox" role="switch" name="strat2" id="strat2" value="Follow along with video" {{ check2 }}>
+                        </div>
+                        <div class="form-check form-switch">
+                            {% set check3 = 'checked' if 'strat3' in in_progress else '' %}
+                            <label class="form-check-label" for="strat3">Repetition</label>
+                            <input class="form-check-input" type="checkbox" role="switch" name="strat3" id="strat3" value="Repetition" {{ check3 }}>
+                        </div>
+                        <div class="form-check form-switch">
+                            {% set check4 = 'checked' if 'strat4' in in_progress else '' %}
+                            <label class="form-check-label" for="strat4">Recall from memory</label>
+                            <input class="form-check-input" type="checkbox" role="switch" name="strat4" id="strat4" value="Recall from memory" {{ check4 }}>
+                        </div>
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Register">
+                </form>
+            </div>
+            <div class="col-4 text-bg-dark rounded p-4">
+                <h1 class="text-success">Login</h1>
+                {% set l_messages = get_flashed_messages(category_filter=['login']) %}
+                {% if l_messages %}
+                    <div class="m-3 p-3 text-bg-danger">
+                        {% for warning in l_messages %}
+                            <p>{{ warning }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <form action="/login/process" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Email:</label>
+                        <input class="form-control" type="text" name="email" id="email">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="password">Password:</label>
+                        <input class="form-control" type="password" name="password" id="password">
+                    </div>
+                    <input class="btn btn-success" type="submit" value="Login">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
