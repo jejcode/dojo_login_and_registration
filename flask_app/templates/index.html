@@ -82,26 +82,9 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <p>My strategies to learn new algorithms:</p>
-                        <div class="form-check form-switch">
-                            {% set check1 = 'checked' if 'strat1' in in_progress else '' %}
-                            <label class="form-check-label" for="strat1">Memorization</label>
-                            <input class="form-check-input" type="checkbox" role="switch" name="strat1" id="strat1" value="Memorization" {{ check1 }}>
-                        </div>
-                        <div class="form-check form-switch">
-                            {% set check2 = 'checked' if 'strat2' in in_progress else '' %}
-                            <label class="form-check-label" for="strat2">Follow along with video</label>
-                            <input class="form-check-input" type="checkbox" role="switch" name="strat2" id="strat2" value="Follow along with video" {{ check2 }}>
-                        </div>
-                        <div class="form-check form-switch">
-                            {% set check3 = 'checked' if 'strat3' in in_progress else '' %}
-                            <label class="form-check-label" for="strat3">Repetition</label>
-                            <input class="form-check-input" type="checkbox" role="switch" name="strat3" id="strat3" value="Repetition" {{ check3 }}>
-                        </div>
-                        <div class="form-check form-switch">
-                            {% set check4 = 'checked' if 'strat4' in in_progress else '' %}
-                            <label class="form-check-label" for="strat4">Recall from memory</label>
-                            <input class="form-check-input" type="checkbox" role="switch" name="strat4" id="strat4" value="Recall from memory" {{ check4 }}>
+                        <div class="form-check">
+                            <label class="form-check-label" for="subscribe">I want to subscribe to the newsletter.</label>
+                            <input class="form-check-input" type="checkbox" name="subscribe" id="subscribe" value="1" checked>
                         </div>
                     </div>
                     <input class="btn btn-primary" type="submit" value="Register">

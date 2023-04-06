@@ -16,22 +16,17 @@ def load_index():
     return render_template('index.html', in_progress = in_progress)
 @app.route('/register/process', methods=['POST'])
 def process_registration():
-    
     if not User.validate_registration(request.form):
         session['in_progress'] = request.form # save progress so user doesn't have to re-enter everything
         return redirect('/')
     # if valid:
-    session.pop('in_progress') # delete form progress
+    if 'in_progress' in session:
+        session.pop('in_progress') # delete form progress
     # hash password
     pw_hash = bcrypt.generate_password_hash(request.form['password'])
     print(pw_hash)
-    strategies = '' # gather checked strategies
     # probably best practice to make a db column for each strategy and store
     # a boolean for each one selected. Here, I just want to gather them.
-    for n in range(1,5):
-        name = 'strat' + str(n)
-        if name in request.form:
-            strategies += request.form[name] + ' '
     data = { # request.form is a tuple, and can't be edited, so create a dict to hold password hash and strategies string
         'fname': request.form['fname'],
         'lname': request.form['lname'],
@@ -40,7 +35,7 @@ def process_registration():
         'birthday': request.form['birthday'],
         'lang': request.form['lang'],
         'os': request.form['os'],
-        'strategies': strategies,
+        'subscription': int(request.form['subscribe']) if 'subscribe' in request.form else 0
     }
     new_user_id = User.add_new_user(data)
     # set session with new ID
@@ -68,7 +63,14 @@ def load_user_dashboard(id):
     # get user data to personalize dashboard
     user_data = User.get_user_data({'id': session['user_id']})
     return render_template('dashboard.html', user = user_data)
+@app.route('/update_subscription', methods=['POST'])
+def update_subscription():
+    toggle = 1 if 'subscribe' in request.form else 0
+    User.update_subscription({'id': request.form['id'], 'subscribe': toggle})
+    message = 'Subscribed' if 'subscribe' in request.form else 'You unsubscribed. Please come back.'
+    flash(message, 'subscribe')
+    return redirect(f"/dashboard/{request.form['id']}")
 @app.route('/logout')
 def logout():
-    session.pop('user_id')
+    session.clear()
     return redirect('/')

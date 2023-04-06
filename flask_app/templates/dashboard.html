@@ -25,8 +25,23 @@
                 <p>{{ user.fav_lang }}</p>
                 <h3 class="text-warning">Favorite Operating System:</h3>
                 <p>{{ user.fav_os }}</p>
-                <h3 class="text-warning">Preferred Learning Strategies:</h3>
-                <p>{{ user.strategies }}</p>
+                <h3 class="text-warning">Subscription preference:</h3>
+                {%set checked = 'checked' if user.subscription == 1 else ''%}
+                <form action="/update_subscription" method="post">
+                    <div class="form-group mb-3">
+                        <input class="form-check-input" type="checkbox" name="subscribe" id="subscribe" value="1" {{ checked }}>
+                        <label class="form-check-label" for="subscribe">Subscribe to the newsletter</label>
+
+                    </div>
+                    <input type="hidden" name="id" value="{{ user.id }}">
+                    <input class="btn btn-success" type="submit" value="Update">
+                </form>
+                {% set notices = get_flashed_messages(category_filter=['subscribe'])%}
+                {% if notices %}
+                    {% for notice in notices %}
+                        <p class="text-bg-warning mt-3">{{ notice }}</p>
+                    {% endfor %}
+                {% endif %}
 
             </div>
         </div>

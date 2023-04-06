@@ -16,7 +16,7 @@ class User:
         self.birthday = data['birthday']
         self.fav_lang = data['fav_lang']
         self.fav_os = data['fav_os']
-        self.strategies = data['strategies']
+        self.subscription = data['subscription']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
     
@@ -24,8 +24,8 @@ class User:
     # CREATE
     @classmethod
     def add_new_user(cls, data): # query to add user to users table
-        query = """INSERT INTO users (first_name, last_name, email, password, birthday, fav_lang, fav_os, strategies)
-                VALUES (%(fname)s, %(lname)s, %(email)s, %(password)s, %(birthday)s, %(lang)s, %(os)s, %(strategies)s)"""
+        query = """INSERT INTO users (first_name, last_name, email, password, birthday, fav_lang, fav_os, subscription)
+                VALUES (%(fname)s, %(lname)s, %(email)s, %(password)s, %(birthday)s, %(lang)s, %(os)s, %(subscription)s)"""
         return connectToMySQL(cls.DB).query_db(query, data) # returns id of new user
     # READ
     @classmethod
@@ -40,6 +40,11 @@ class User:
         if len(results) < 1:
             return 0
         return cls(results[0]) # create instance of user and return it
+    # UPDATE
+    @classmethod
+    def update_subscription(cls, data):
+        query = "UPDATE users SET subscription=%(subscribe)s WHERE id=%(id)s"
+        return connectToMySQL(cls.DB).query_db(query, data)
     # Static methods for validation
     @staticmethod
     def determine_age(birthday): # function found at https://www.geeksforgeeks.org/python-program-to-calculate-age-in-year/
@@ -81,9 +86,6 @@ class User:
             is_valid = False
         if 'os' not in data:
             flash('An operating system must be selected.', 'registration')
-            is_valid = False
-        if 'strat1' not in data and 'strat2' not in data and 'strat3' not in data and 'strat4' not in data:
-            flash('At least one learning strategy must be selected.', 'registration')
             is_valid = False
         return is_valid
     @staticmethod
